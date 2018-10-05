@@ -6,15 +6,15 @@ exports = async function(changeEvent) {
   var aqr = await gconn.aggregate([{$match:{name:doc.name}},{$group:{_id:"$name",avgpins: { $avg: "$total"}, totpins: { $sum: "$total"}}}]).toArray();
   var gp = await gconn.count({name:doc.name})*1;
   
-  var st = await gconn.aggregate([{$match: { name: doc.name}},{$unwind: '$frames'},{$match: {$or: [{'frames.b1':'X'},{'frames.b2':'X'},{'frames.b3':'X'}]}},{$count:"val"}]).toArray();
-  var sp = await gconn.aggregate([{$match: { name: doc.name}},{$unwind: '$frames'},{$match: {$or: [{'frames.b2':'/'},{'frames.b3':'/'}]}},{$count:"val"}]).toArray();
+  // strike, spare, split, splits picked up, first ball average, open frames
+  var st = await gconn.aggregate([{$match: { name: doc.name}},{$unwind: '$frames'},{$match: {$or: [{'frames.b1':'10'},{'frames.b2':'10'},{'frames.b3':'10'}]}},{$count:"val"}]).toArray();
+  var sp = await gconn.aggregate([{$match: { name: doc.name}},{$unwind: '$frames'},{$match: {$or: [{'frames.spare':true},{'frames.b3spare':true}]}},{$count:"val"}]).toArray();
   var sl = await gconn.aggregate([{$match: { name: doc.name}},{$unwind: '$frames'},{$match: {'frames.split':true}},{$count:"val"}]).toArray();
-  var spu = await gconn.aggregate([{$match: { name: 'Chris'}},{$unwind: '$frames'},{$match: {$and:[ {'frame.split':true},{'frames.b2':'/'}]}},{$count:"val"}]).toArray();
-  
-  var spuct = 0;
-  var stct = 0;
-  var spct = 0;
-  var slct = 0;
+  var spu = await gconn.aggregate([{$match: { name: doc.name}},{$unwind: '$frames'},{$match: {$and:[ {'frame.split':true},{'frames.b2':'/'}]}},{$count:"val"}]).toArray();
+  var fba = await gconn.aggregate([{$match: { name: doc.name}},{$unwind: '$frames'},{$group:{_id:"$name",val:{$avg: "$frames.b1"}}}]).toArray();
+  var ofa = await gconn.aggregate([{$match: { name: doc.name}},{$unwind: '$frames'},{$match: {$and: [{'frames.spare':false},{'frames.b1':{$lt: 10}}]}},{$count:"val"}]).toArray();
+  var spuct,stct,spct,slct,fbact,ofct = 0;
+  var fplayed = 10*gp;
   try {
     spuct = spu[0].val;
   } catch(err) {
@@ -35,6 +35,16 @@ exports = async function(changeEvent) {
   } catch(err) {
     slct = 0;
   }
+  try {
+    fbact = fba[0].val;
+  } catch(err) {
+    fbact = 0;
+  }
+  try {
+    ofct = ofa[0].val;
+  } catch(err) {
+    ofct = 0;
+  }
   var d = new Date(Date.now());
   pconn.updateOne({name:doc.name},{$set:
     {name:doc.name,
@@ -45,5 +55,8 @@ exports = async function(changeEvent) {
     spares:spct,
     splits:slct,
     splitspu:spuct,
+    firstballavg:Math.floor(fbact),
+    openframes:ofct,
+    framesplayed:fplayed,
     modified:d}},{upsert:true});
 };

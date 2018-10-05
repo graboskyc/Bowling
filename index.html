@@ -89,14 +89,25 @@
             while (i < 11) {
               var frame = {};
               frame.split = false;
+              frame.spare = false;
               var f = 'frame'+i;
+              // is a split
               if ($('input[data-frame="'+f+'"][data-ball="split"').val().length != 0) { frame.split=true;}
               frame.b1 = correctFrameNum($('input[data-frame="'+f+'"][data-ball="ball1"').val());
-              if(frame.b1 != "10") {
+              if(frame.b1 != 10) {
                 frame.b2 = correctFrameNum($('input[data-frame="'+f+'"][data-ball="ball2"').val());
+                if (frame.b2 == "/") { 
+                  frame.b2 = 10 - frame.b1*1 ;
+                  frame.spare = true;
+                }
               }
               if(i==10) {
                 frame.b3 = correctFrameNum($('input[data-frame="'+f+'"][data-ball="ball3"').val());
+                frame.b3spare = false;
+                if (frame.b3 == "/") { 
+                  frame.b3 = 10 - frame.b1*1 ;
+                  frame.b3spare = true;
+                }
               }
               obj.frames.push(frame);
               i = i + 1;
