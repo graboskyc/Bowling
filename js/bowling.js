@@ -84,7 +84,7 @@ function getNextBall(framenum, bn) {
     else if(isNaN(val)) { 
       if(val=="/") { val = "/";}
       else if (val=="-") { val = 0;}
-      else { val = "X"; }
+      else { val = 10; }
     }
     else { val = val*1;}
     return val;
