@@ -57,3 +57,4 @@ body {
   h2.nameform { font-size: 40px;}
   input.nameform { font-size: 40px; color:#636c72; text-align: center;}
   #mainctr { padding-top:10px;}
+  th,td { font-size: 40px;}
