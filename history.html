@@ -1,0 +1,103 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Bowling Tracker">
+    <meta name="author" content="graboskyc">
+
+    <title>Bowling Tracker</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="css/album.css" rel="stylesheet">
+    <link href="css/bowling.css" rel="stylesheet">
+    <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
+  </head>
+
+  <body>
+
+    <section class="jumbotron text-center"  style="background: url(assets/jumbotron.JPG); background-repeat: no-repeat; background-position:  center center; background-size: cover;">
+      <div class="container">
+        <h1 class="jumbotron-heading" style="color:#ffffff;font-size:60px;font-weight: bold;">Bowling Scores</h1>
+      </div>
+    </section>
+
+    <div class="album text-muted">
+      <div class="bodyctr">
+        <h1 class="nameform">Player: <input type="text" id="txt_player" value=""  class="nameform" style="width:250px;"  /></h1>
+        <div id="mainctr">
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="js/ie10-viewport-bug-workaround.js"></script>
+    <script src="js/bowling.js"></script>
+    <script src="https://s3.amazonaws.com/stitch-sdks/js/bundles/4.0.13/stitch.js"></script>
+    <script>
+      function buildGrid(docs) {
+        docs.map(game=> {
+          var w = 1; 
+          wp = "33";
+          apStr = '<div class="row" style="margin-top:10px;">\
+          <div class="col-lg-12" style="text-align:center;font-size:20px;"><b>Game '+game.game+'</b> on '+game.played_on+'</div></div><div class="row">';
+          $.each(game.frames, function(i,f) {
+            if(i==9) { w = 2; wp = "25"; } else {w=1;wp="33";}
+            i=i+1;
+            var s = "";
+            var b1="";
+            var b2="";
+            var b3="";
+            if(f.hasOwnProperty("b1")) { b1 = f.b1;}
+            if(f.hasOwnProperty("b2")) { b2 = f.b2;}
+            if(f.hasOwnProperty("b3")) { b3 = f.b3;}
+            if (f.split) { s = "S";}
+            apStr = apStr+ '<div class="col-sm-'+w+' bowlingcellouter bowlingborder frame'+i+'"> \
+                  <div class="bowlinginnerscore issplit frame'+i+'" style="width:'+wp+'%;"><input type="text" class="scorebox" data-frame="frame'+i+'" data-ball="split" value="'+s+'" readonly /></div> \
+                  <div class="bowlinginnerscore bowlingborder ballone frame'+i+'" style="width:'+wp+'%;"><input type="text" class="scorebox" data-frame="frame'+i+'" data-ball="ball1" value="'+b1+'" readonly /></div>\
+                  <div class="bowlinginnerscore bowlingborder balltwo frame'+i+'" style="width:'+wp+'%;"><input type="text" class="scorebox" data-frame="frame'+i+'" data-ball="ball2" value="'+b2+'" readonly /></div>';
+                  if(i==10) {
+                    apStr = apStr +'<div class="bowlinginnerscore bowlingborder ballthree frame'+i+'" style="width:'+wp+'%;"><input type="text" class="scorebox" data-frame="frame'+i+'" data-ball="ball3" value="'+b3+'" /></div>';
+                  }
+                  apStr = apStr + '<div class="framescore framescoreformat frame'+i+'"></div> \
+              </div>';
+          });
+          apStr = apStr + '<div class="col-sm-1 bowlingcellouter bowlingborder"> \
+                <div class="bowlingtotalscore bowlingtotalscoreformat">'+game.total+'</div> \
+            </div></div>';
+          $('#mainctr').append(apStr);
+          updateTotal();
+          $('input').removeAttr('data-frame');
+          $('input').removeAttr('data-ball');
+          $('.bowlingtotalscore').text(game.total);
+          $('.framescore').removeClass('framescore');
+          $('.bowlingtotalscore').removeClass('bowlingtotalscore');
+          $('#txt_player').val(game.name);
+        });
+      }
+
+      $(function() {
+        var url = window.self.location.href;
+        var kvp = url.split("#!");
+        if(kvp.length!=2) { window.location = "index.html";}
+        const client = stitch.Stitch.initializeDefaultAppClient('bowling-sfeoc');
+
+        const db = client.getServiceClient(stitch.RemoteMongoClient.factory, 'mongodb-atlas').db('bowling');
+
+        client.auth.loginWithCredential(new stitch.AnonymousCredential()).then(() => 
+          db.collection('games').find({name:kvp[1]},{ sort: {played_on: -1}}).asArray()).then(buildGrid).catch(err => {console.error(err)});
+        });
+    </script>
+  </body>
+</html>

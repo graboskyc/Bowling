@@ -1,0 +1,131 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Bowling Tracker">
+    <meta name="author" content="graboskyc">
+
+    <title>Bowling Tracker</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="css/album.css" rel="stylesheet">
+    <link href="css/bowling.css" rel="stylesheet">
+    <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
+  </head>
+
+  <body>
+
+    <section class="jumbotron text-center"  style="background: url(assets/jumbotron.JPG); background-repeat: no-repeat; background-position:  center center; background-size: cover;">
+      <div class="container">
+        <h1 class="jumbotron-heading" style="color:#ffffff;font-size:60px;font-weight: bold;">Bowling Scores</h1>
+      </div>
+    </section>
+
+    <div class="album text-muted">
+      <div class="bodyctr">
+        <h1 class="nameform">Player: <input type="text" id="txt_player" value=""  class="nameform" style="width:250px;"  /></h1>
+        <h2 class="nameform">Game: <input type="text" id="txt_gamenum" value="1"  class="nameform" style="width:40px;" /> <button type="button" class="btn btn-danger" onclick="nextGame()">Next Game</button></h2>
+        <h2 class="nameform">Date: <input type="text" id="txt_date" class="nameform" style="width:250px;"  /> </h2>
+        <a class="btn btn-primary btn-lg" href="history.html" target="_blank" id="a_history">History</a>
+        <a class="btn btn-info btn-lg" href="stats.html" target="_blank" id="a_stats">Stats</a>
+        <button type="button" class="btn btn-success btn-lg" onclick="buildJson()">Insert Game</button>
+        <div class="row" id="mainctr">
+        </div>
+      </div>
+      <div id="jsontosend"></div>
+    </div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="js/ie10-viewport-bug-workaround.js"></script>
+    <script src="https://s3.amazonaws.com/stitch-sdks/js/bundles/4.0.13/stitch.js"></script>
+    <script src="js/bowling.js"></script>
+    <script>
+      //GLOBALS
+      var framesArr = [];
+      var runningTotal = 0;
+
+      function buildJson() {
+        if($('#txt_player').val().length < 3) {
+          alert("You must provide your name!");
+        } else {
+          var r = confirm("Save record?");
+          if(r) {
+            var i = 1;
+            var obj = {};
+            obj.name = $('#txt_player').val();
+            obj.game = $('#txt_gamenum').val()*1;
+            obj.played_on =$ ('#txt_date').val();
+            obj.frames = [];
+            while (i < 11) {
+              var frame = {};
+              frame.split = false;
+              var f = 'frame'+i;
+              if ($('input[data-frame="'+f+'"][data-ball="split"').val().length != 0) { frame.split=true;}
+              frame.b1 = correctFrameNum($('input[data-frame="'+f+'"][data-ball="ball1"').val());
+              if(frame.b1 != "X") {
+                frame.b2 = correctFrameNum($('input[data-frame="'+f+'"][data-ball="ball2"').val());
+              }
+              if(i==10) {
+                frame.b3 = correctFrameNum($('input[data-frame="'+f+'"][data-ball="ball3"').val());
+              }
+              obj.frames.push(frame);
+              i = i + 1;
+            }
+            obj.total = $('.bowlingtotalscore').text()*1;
+            $('#jsontosend').text(JSON.stringify(obj));
+
+            var url = "http://url"+JSON.stringify(obj);
+            $.get( url );
+          }
+        }
+      }
+      $(document).ready(function () {
+        var i = 1;
+        var w = 1; 
+        wp = "33";
+
+        var d = new Date();
+        $('#txt_date').val(d.yyyymmdd());
+
+        while (i < 11) {
+          if(i==10) { w = 2; wp = "25"; }
+          apStr = '<div class="col-lg-'+w+' bowlingcellouter bowlingborder frame'+i+'"> \
+                  <div class="bowlinginnerscore issplit frame'+i+'" style="width:'+wp+'%;"><input type="text" class="scorebox" data-frame="frame'+i+'" data-ball="split" /></div> \
+                  <div class="bowlinginnerscore bowlingborder ballone frame'+i+'" style="width:'+wp+'%;"><input type="text" class="scorebox" data-frame="frame'+i+'" data-ball="ball1" /></div>\
+                  <div class="bowlinginnerscore bowlingborder balltwo frame'+i+'" style="width:'+wp+'%;"><input type="text" class="scorebox" data-frame="frame'+i+'" data-ball="ball2" /></div>';
+                  if(i==10) {
+                    apStr = apStr +'<div class="bowlinginnerscore bowlingborder ballthree frame'+i+'" style="width:'+wp+'%;"><input type="text" class="scorebox" data-frame="frame'+i+'" data-ball="ball3" /></div>';
+                  }
+                  apStr = apStr + '<div class="framescore framescoreformat frame'+i+'">0</div> \
+              </div>';
+          
+          $('#mainctr').append(apStr);
+          i = i+1;
+        }
+        $('#mainctr').append('<div class="col-lg-1 bowlingcellouter bowlingborder"> \
+                <div class="bowlingtotalscore bowlingtotalscoreformat">0</div> \
+            </div>');
+        $("input.scorebox").change(function() {
+          updateTotal();
+        });
+        $("#txt_player").change(function() {
+          console.log("Fired");
+          $('#a_history').attr("href", "history.html#!" + $('#txt_player').val());
+          $('#a_stats').attr("href", "stats.html#!" + $('#txt_player').val());
+        });
+      });
+    </script>
+  </body>
+</html>

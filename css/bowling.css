@@ -1,0 +1,59 @@
+body {
+    background-color: #f7f7f7;
+  }
+  .bodyctr {
+    padding-left:2%;
+    padding-right: 2%;
+  }
+  .bowlingcellouter {
+    float:left;
+    height:250px;
+  }
+  .bowlingborder {
+    border-style: solid;
+    border: 1px solid #000;
+  }
+  .bowlinginnerscore{
+    float:left;
+    top:0px;
+    font-size: 38px;
+    text-align: center;
+    font-weight: bold;
+    vertical-align: text-top;
+    padding: 0px;
+    margin: 0px;
+  }
+  .scorebox {
+    width:100%;
+    height: 100%;
+    text-align: center;
+    font-size: 38px;
+    font-weight: bold;
+    background-color: #f7f7f7;
+    border:none;
+    color:#636c72;
+  }
+  .bowlingtotalscoreformat {
+    font-size: 72px;
+    text-align: center;
+    width:100%;
+    height: 100%;
+    vertical-align: text-bottom;
+  }
+  .nameform {
+    margin-bottom: 10px;
+  }
+  .framescoreformat {
+    position: absolute;
+    bottom: 10px;
+    width: 90%;
+    font-size:60px;
+    font-weight: bold;
+    text-align: center;
+    margin:0px;
+    padding: 0px;
+  }
+  h1.nameform { font-size: 56px;}
+  h2.nameform { font-size: 40px;}
+  input.nameform { font-size: 40px; color:#636c72; text-align: center;}
+  #mainctr { padding-top:10px;}
