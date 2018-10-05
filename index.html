@@ -35,15 +35,15 @@
 
     <section class="jumbotron text-center"  style="background: url(assets/jumbotron.JPG); background-repeat: no-repeat; background-position:  center center; background-size: cover;">
       <div class="container">
-        <h1 class="jumbotron-heading" style="color:#ffffff;font-size:60px;font-weight: bold;">Bowling Scores</h1>
+        <h1 class="jumbotron-heading" style="color:#ffffff;font-size:60px;font-weight: bold;">Bowling Tracker</h1>
       </div>
     </section>
 
     <div class="album text-muted">
       <div class="bodyctr">
-        <h1 class="nameform">Player: <input type="text" id="txt_player" value=""  class="nameform" style="width:250px;"  /></h1>
-        <h2 class="nameform">Game: <input type="text" id="txt_gamenum" value="1"  class="nameform" style="width:40px;" /> <button type="button" class="btn btn-info" onclick="nextGame()"><i class="fa fa-forward" aria-hidden="true"></i> Next Game</button></h2>
-        <h2 class="nameform">Date: <input type="text" id="txt_date" class="nameform" style="width:250px;"  /> </h2>
+        <h2 class="nameform"><i class="fa fa-fw fa-user" aria-hidden="true"></i> Player: <input type="text" id="txt_player" value=""  class="nameform" style="width:250px;"  /></h2>
+        <h2 class="nameform"><i class="fa fa-fw fa-trophy" aria-hidden="true"></i> Game: <input type="text" id="txt_gamenum" value="1"  class="nameform" style="width:40px;" /> <button type="button" class="btn btn-info" onclick="nextGame()"><i class="fa fa-forward" aria-hidden="true"></i> Next Game</button></h2>
+        <h2 class="nameform"><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Date: <input type="text" id="txt_date" class="nameform" style="width:250px;"  /> </h2>
         <div class="row" id="mainctr">
         </div>
       </div>
@@ -144,6 +144,13 @@
           $('#a_history').attr("href", "history.html#!" + $('#txt_player').val());
           $('#a_stats').attr("href", "stats.html#!" + $('#txt_player').val());
         });
+        var url = window.self.location.href;
+        var kvp = url.split("#!");
+        if(kvp.length==2) { 
+          $('#txt_player').val(kvp[1]);
+          $('#a_history').attr("href", "history.html#!" + $('#txt_player').val());
+          $('#a_stats').attr("href", "stats.html#!" + $('#txt_player').val());
+        }
       });
     </script>
   </body>
