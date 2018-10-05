@@ -49,6 +49,8 @@
           if(player.hasOwnProperty('pic')) {
             $('#jumbo').append('<p class="lead"><img src="'+player.pic+'" width="150" height="150" /></p>');
           }
+          $('#jumbo').append('<p><a href="index.html" style="color:#ffffff;">Home</a></p>');
+          $('#jumbo').append('<p><a href="history.html#!'+player.name+'" style="color:#ffffff;">History</a></p>');
           var apStr = '<table class="table table-striped table-dark">\
           <thead class="thead-dark">\
             <tr>\

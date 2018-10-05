@@ -23,6 +23,8 @@
     <section class="jumbotron text-center"  style="background: url(assets/jumbotron.JPG); background-repeat: no-repeat; background-position:  center center; background-size: cover;">
       <div class="container">
         <h1 class="jumbotron-heading" style="color:#ffffff;font-size:60px;font-weight: bold;">Bowling Scores</h1>
+        <p><a href="index.html" style="color:#ffffff;">Home</a></p>
+        <p><a href="stats.html" id="statslink" style="color:#ffffff;">Stats</a></p>
       </div>
     </section>
 
@@ -92,6 +94,7 @@
         var url = window.self.location.href;
         var kvp = url.split("#!");
         if(kvp.length!=2) { window.location = "index.html";}
+        $('#statslink').attr('href','stats.html#!'+kvp[1]);
         const client = stitch.Stitch.initializeDefaultAppClient('bowling-sfeoc');
 
         const db = client.getServiceClient(stitch.RemoteMongoClient.factory, 'mongodb-atlas').db('bowling');
