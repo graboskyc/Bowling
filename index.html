@@ -20,6 +20,19 @@
 
   <body>
 
+      <header>
+          <div class="navbar navbar-dark bg-dark shadow-sm">
+            <div class="container d-flex justify-content-between">
+                <a href="#" id="a_history" class="navbar-brand d-flex align-items-center">
+                  <i class="fa fa-history" aria-hidden="true"></i> &nbsp; History
+                </a>
+                <a href="#" id="a_stats" class="navbar-brand d-flex align-items-center">
+                  <i class="fa fa-line-chart" aria-hidden="true"></i> &nbsp; Statistics
+                </a>
+            </div>
+          </div>
+        </header>
+
     <section class="jumbotron text-center"  style="background: url(assets/jumbotron.JPG); background-repeat: no-repeat; background-position:  center center; background-size: cover;">
       <div class="container">
         <h1 class="jumbotron-heading" style="color:#ffffff;font-size:60px;font-weight: bold;">Bowling Scores</h1>
@@ -29,11 +42,8 @@
     <div class="album text-muted">
       <div class="bodyctr">
         <h1 class="nameform">Player: <input type="text" id="txt_player" value=""  class="nameform" style="width:250px;"  /></h1>
-        <h2 class="nameform">Game: <input type="text" id="txt_gamenum" value="1"  class="nameform" style="width:40px;" /> <button type="button" class="btn btn-danger" onclick="nextGame()">Next Game</button></h2>
+        <h2 class="nameform">Game: <input type="text" id="txt_gamenum" value="1"  class="nameform" style="width:40px;" /> <button type="button" class="btn btn-info" onclick="nextGame()"><i class="fa fa-forward" aria-hidden="true"></i> Next Game</button></h2>
         <h2 class="nameform">Date: <input type="text" id="txt_date" class="nameform" style="width:250px;"  /> </h2>
-        <a class="btn btn-primary btn-lg" href="history.html" target="_blank" id="a_history">History</a>
-        <a class="btn btn-info btn-lg" href="stats.html" target="_blank" id="a_stats">Stats</a>
-        <button type="button" class="btn btn-success btn-lg" onclick="buildJson()">Insert Game</button>
         <div class="row" id="mainctr">
         </div>
       </div>
@@ -124,6 +134,7 @@
         }
         $('#mainctr').append('<div class="col-lg-1 bowlingcellouter bowlingborder"> \
                 <div class="bowlingtotalscore bowlingtotalscoreformat">0</div> \
+                <button type="button" class="btn btn-success btn-lg" onclick="buildJson()"><i class="fa fa-floppy-o" aria-hidden="true"></i> Save Game</button>\
             </div>');
         $("input.scorebox").change(function() {
           updateTotal();
