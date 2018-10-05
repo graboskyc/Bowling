@@ -57,6 +57,13 @@
       var framesArr = [];
       var runningTotal = 0;
 
+      function nextGame() {
+        $('#txt_gamenum').val($('#txt_gamenum').val()*1+1);
+        $('.scorebox').val('');
+        $('.bowlingtotalscore').text('0');
+        $('.framescore').text('0');
+      }
+
       function buildJson() {
         if($('#txt_player').val().length < 3) {
           alert("You must provide your name!");
