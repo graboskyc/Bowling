@@ -6,8 +6,8 @@ exports = async function(changeEvent) {
   var aqr = await gconn.aggregate([{$match:{name:doc.name}},{$group:{_id:"$name",avgpins: { $avg: "$total"}, totpins: { $sum: "$total"}}}]).toArray();
   var gp = await gconn.count({name:doc.name})*1;
   
-  var st = await gconn.aggregate([{$match: { name: doc.name}},{$unwind: '$frames'},{$match: {'frames.b1':'X'}},{$count:"val"}]).toArray();
-  var sp = await gconn.aggregate([{$match: { name: doc.name}},{$unwind: '$frames'},{$match: {'frames.b2':'/'}},{$count:"val"}]).toArray();
+  var st = await gconn.aggregate([{$match: { name: doc.name}},{$unwind: '$frames'},{$match: {$or: [{'frames.b1':'X'},{'frames.b2':'X'},{'frames.b3':'X'}]}},{$count:"val"}]).toArray();
+  var sp = await gconn.aggregate([{$match: { name: doc.name}},{$unwind: '$frames'},{$match: {$or: [{'frames.b2':'/'},{'frames.b3':'/'}]}},{$count:"val"}]).toArray();
   var sl = await gconn.aggregate([{$match: { name: doc.name}},{$unwind: '$frames'},{$match: {'frames.split':true}},{$count:"val"}]).toArray();
   var spu = await gconn.aggregate([{$match: { name: 'Chris'}},{$unwind: '$frames'},{$match: {$and:[ {'frame.split':true},{'frames.b2':'/'}]}},{$count:"val"}]).toArray();
   
