@@ -3,11 +3,12 @@ exports = async function(changeEvent) {
   var pconn = context.services.get("mongodb-atlas").db("bowling").collection("players");
   var gconn = context.services.get("mongodb-atlas").db("bowling").collection("games");
   
-  var aqr = await gconn.aggregate([{$match:{name:doc.name}},{$group:{_id:"$name",avgpins: { $avg: "$total"}, totpins: { $sum: "$total"}}}]).toArray();
+  var aqr = await gconn.aggregate([{$match:{name:doc.name}},{$group:{_id:"$name",avgpins: { $avg: "$total"}, totpins: { $sum: "$total"}, minpins: {$min: "$total"}, maxpins: {$max: "$total"}}}]).toArray();
   var gp = await gconn.count({name:doc.name})*1;
+  var league = await gconn.aggregate([{$group:{_id:"$name",avgpins: { $avg: "$total"}, totpins: { $sum: "$total"}}}]).toArray();
   
   // strike, spare, split, splits picked up, first ball average, open frames
-  var st = await gconn.aggregate([{$match: { name: doc.name}},{$unwind: '$frames'},{$match: {$or: [{'frames.b1':'10'},{'frames.b2':'10'},{'frames.b3':'10'}]}},{$count:"val"}]).toArray();
+  var st = await gconn.aggregate([{$match: { name: doc.name}},{$unwind: '$frames'},{$match: {$or: [{'frames.b1':10},{'frames.b2':10},{'frames.b3':10}]}},{$count:"val"}]).toArray();
   var sp = await gconn.aggregate([{$match: { name: doc.name}},{$unwind: '$frames'},{$match: {$or: [{'frames.spare':true},{'frames.b3spare':true}]}},{$count:"val"}]).toArray();
   var sl = await gconn.aggregate([{$match: { name: doc.name}},{$unwind: '$frames'},{$match: {'frames.split':true}},{$count:"val"}]).toArray();
   var spu = await gconn.aggregate([{$match: { name: doc.name}},{$unwind: '$frames'},{$match: {$and:[ {'frame.split':true},{'frames.b2':'/'}]}},{$count:"val"}]).toArray();
@@ -46,6 +47,7 @@ exports = async function(changeEvent) {
     ofct = 0;
   }
   var d = new Date(Date.now());
+  var hc = Math.floor((200 - Math.floor(aqr[0].avgpins))*.85);
   pconn.updateOne({name:doc.name},{$set:
     {name:doc.name,
     gamesplayed:gp,
@@ -58,5 +60,9 @@ exports = async function(changeEvent) {
     firstballavg:Math.floor(fbact),
     openframes:ofct,
     framesplayed:fplayed,
+    leagueavg:Math.floor(league[0].avgpins),
+    minpins:aqr[0].minpins,
+    maxpins:aqr[0].maxpins,
+    handicap:hc,
     modified:d}},{upsert:true});
 };
