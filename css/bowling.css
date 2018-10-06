@@ -9,6 +9,8 @@ body {
     float:left;
     height:250px;
     text-align: center;
+    width: 100%;
+    padding: 0px;
   }
   .bowlingborder {
     border-style: solid;
@@ -17,7 +19,7 @@ body {
   .bowlinginnerscore{
     float:left;
     top:0px;
-    font-size: 38px;
+    font-size: 28px;
     text-align: center;
     font-weight: bold;
     vertical-align: text-top;
@@ -28,14 +30,14 @@ body {
     width:100%;
     height: 100%;
     text-align: center;
-    font-size: 38px;
+    font-size: 28px;
     font-weight: bold;
     background-color: #f7f7f7;
     border:none;
     color:#636c72;
   }
   .bowlingtotalscoreformat {
-    font-size: 72px;
+    font-size: 62px;
     text-align: center;
     width:100%;
     height: 75%;
@@ -48,7 +50,7 @@ body {
     position: absolute;
     bottom: 10px;
     width: 90%;
-    font-size:60px;
+    font-size:48px;
     font-weight: bold;
     text-align: center;
     margin:0px;
@@ -58,4 +60,4 @@ body {
   h2.nameform { font-size: 40px;}
   input.nameform { font-size: 40px; color:#636c72; text-align: center;}
   #mainctr { padding-top:10px;}
-  th,td { font-size: 40px;}
+  th,td { font-size: 30px;}

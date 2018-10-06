@@ -130,7 +130,7 @@
 
         while (i < 11) {
           if(i==10) { w = 2; wp = "25"; }
-          apStr = '<div class="col-lg-'+w+' bowlingcellouter bowlingborder frame'+i+'"> \
+          apStr = '<div class="col-sm-'+w+' bowlingcellouter bowlingborder frame'+i+'"> \
                   <div class="bowlinginnerscore issplit frame'+i+'" style="width:'+wp+'%;"><input type="text" class="scorebox" data-frame="frame'+i+'" data-ball="split" /></div> \
                   <div class="bowlinginnerscore bowlingborder ballone frame'+i+'" style="width:'+wp+'%;"><input type="text" class="scorebox" data-frame="frame'+i+'" data-ball="ball1" /></div>\
                   <div class="bowlinginnerscore bowlingborder balltwo frame'+i+'" style="width:'+wp+'%;"><input type="text" class="scorebox" data-frame="frame'+i+'" data-ball="ball2" /></div>';
@@ -143,7 +143,7 @@
           $('#mainctr').append(apStr);
           i = i+1;
         }
-        $('#mainctr').append('<div class="col-lg-1 bowlingcellouter bowlingborder"> \
+        $('#mainctr').append('<div class="col-sm-1 bowlingcellouter bowlingborder"> \
                 <div class="bowlingtotalscore bowlingtotalscoreformat">0</div> \
                 <button type="button" class="btn btn-success btn-lg" onclick="buildJson()"><i class="fa fa-floppy-o" aria-hidden="true"></i> Record</button>\
             </div>');

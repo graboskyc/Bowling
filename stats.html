@@ -64,6 +64,7 @@
           }
           var openframeper = Math.floor(((player.openframes*1)/(player.framesplayed*1))*100);
           var spuper = Math.floor(((player.splitspu*1)/(player.splits*1))*100);
+          var strikeper = Math.floor(((player.strikes*1)/(player.framesplayed*1))*100);
           var apStr = '<table class="table table-striped table-dark">\
           <thead class="thead-dark">\
             <tr>\
@@ -85,7 +86,7 @@
             <tr><td>Worst Game</td><td style="font-weight:lighter;">'+player.minpins+'</td></tr>\
             <tr><td>Best Game</td><td style="font-weight:lighter;">'+player.maxpins+'</td></tr>\
             <tr><td colspan="2" style="text-align:center;font-weight:bold;">Frame Stats</td></tr>\
-            <tr><td>Strikes</td><td style="font-weight:lighter;">'+player.strikes+'</td></tr>\
+            <tr><td>Strikes</td><td style="font-weight:lighter;">'+player.strikes+' ('+strikeper+'%)</td></tr>\
             <tr><td>Spares</td><td style="font-weight:lighter;">'+player.spares+'</td></tr>\
             <tr><td>Splits</td><td style="font-weight:lighter;">'+player.splits+'</td></tr>\
             <tr><td>Splits Picked Up</td><td style="font-weight:lighter;">'+player.splitspu+' ('+spuper+'%)</td></tr>\
