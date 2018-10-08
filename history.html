@@ -117,7 +117,7 @@
         const db = client.getServiceClient(stitch.RemoteMongoClient.factory, 'mongodb-atlas').db('bowling');
 
         client.auth.loginWithCredential(new stitch.AnonymousCredential()).then(() => 
-          db.collection('games').find({name:kvp[1]},{ sort: {played_on: -1}}).asArray()).then(buildGrid).catch(err => {console.error(err)});
+          db.collection('games').find({name:kvp[1]},{ sort: {played_on: -1, game:1}}).asArray()).then(buildGrid).catch(err => {console.error(err)});
         });
     </script>
   </body>
