@@ -61,3 +61,4 @@ body {
   input.nameform { font-size: 40px; color:#636c72; text-align: center;}
   #mainctr { padding-top:10px;}
   th,td { font-size: 30px;}
+.jumbotron { border-radius:0px !important;}
