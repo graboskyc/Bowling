@@ -57,7 +57,7 @@ exports = async function(changeEvent) {
     spares:spct,
     splits:slct,
     splitspu:spuct,
-    firstballavg:Math.floor(fbact),
+    firstballavg:Math.floor(fbact*100)/100,
     openframes:ofct,
     framesplayed:fplayed,
     leagueavg:Math.floor(league[0].avgpins),
