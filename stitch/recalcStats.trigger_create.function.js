@@ -6,6 +6,8 @@ exports = async function(changeEvent) {
   var aqr = await gconn.aggregate([{$match:{name:doc.name}},{$group:{_id:"$name",avgpins: { $avg: "$total"}, totpins: { $sum: "$total"}, minpins: {$min: "$total"}, maxpins: {$max: "$total"}}}]).toArray();
   var gp = await gconn.count({name:doc.name})*1;
   var league = await gconn.aggregate([{$group:{_id:"$name",avgpins: { $avg: "$total"}, totpins: { $sum: "$total"}}}]).toArray();
+
+  pconn.updateMany({},{$set:{leagueavg:Math.floor(league[0].avgpins)}});
   
   // strike, spare, split, splits picked up, first ball average, open frames
   var st = await gconn.aggregate([{$match: { name: doc.name}},{$unwind: '$frames'},{$match: {$or: [{'frames.b1':10},{'frames.b2':10},{'frames.b3':10}]}},{$count:"val"}]).toArray();
