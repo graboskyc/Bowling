@@ -71,7 +71,19 @@
       var client = 0;
       var db = 0;
       var runningTotal = 0;
+      var totals = [];
       var games=0;
+
+      // i hate javascript with its async bullshit
+      function trackTotal(newTotal) {
+        totals.push(newTotal);
+        var localTotal = 0;
+        $.each(totals, function(i,v) {
+          localTotal+=v;
+        })
+        runningTotal = localTotal;
+        games = totals.length;
+      }
 
       function loadDays(btn) {
         $('#mainctr').empty();
@@ -80,8 +92,6 @@
         $(btn).addClass("btn-primary");
         $(btn).removeClass("btn-secondary");
         var p = getPlayer();
-        runningTotal = 0;
-        games = 0;
         loadData(p,$(btn).data("days"))
       }
       function buildGrid(docs) {
@@ -120,11 +130,10 @@
                 <div class="bowlingtotalscore bowlingtotalscoreformat">'+game.total+'</div> \
             </div></div>';
           $('#mainctr').append(apStr);
-          runningTotal = runningTotal+(game.total*1);
-          games++;
+          updateTotal();
+          trackTotal(game.total*1);
           $('#txt_games').text(games);
           $('#txt_average').text(Math.floor(runningTotal/games));
-          updateTotal();
           $('input').removeAttr('data-frame');
           $('input').removeAttr('data-ball');
           $('.bowlingtotalscore').text(game.total);
@@ -147,6 +156,7 @@
         $('#mainctr').empty();
         runningTotal = 0;
         games = 0;
+        totals = [];
         
         var find = {name:player};
         if(days != 0) {
