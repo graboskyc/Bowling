@@ -1,8 +1,14 @@
 function getNextBall(framenum, bn) {
     var nextframenum = framenum*1+1;
 
+    // this was probably caused by a strike in frame 9 and frame 10 ball 1
+    // so we are trying to get two balls ahead which is frame 11 ball 1
+    // so redirect to frame 10 ball 2 and return value back to frame 9's call
+    if((nextframenum == 11) && (bn == 1)) {
+      return $('input[data-frame="frame10"][data-ball="ball2').val();
+    }
     // ignore any calculations beyond 10th frame
-    if (nextframenum > 11) {
+    else if (nextframenum > 10) {
       return 0;
     } else {
       // find next ball
