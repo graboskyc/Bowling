@@ -149,12 +149,6 @@
         $("input.scorebox").change(function() {
           updateTotal();
         });
-        $("#txt_player").change(function() {
-          console.log("Fired");
-          $('#a_history').attr("href", "history.html#!" + $('#txt_player').val());
-          $('#a_stats').attr("href", "stats.html#!" + $('#txt_player').val());
-          $('title').text( $('#txt_player').val() + ' Score Entry');
-        });
         var url = window.self.location.href;
         var kvp = url.split("#!");
         if(kvp.length==2) { 

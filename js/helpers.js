@@ -29,10 +29,16 @@ function loadDays(btn) {
     loadData(p,$(btn).data("days"))
 }
 
+function setPlayer() {
+    window.history.pushState({},$('#txt_player').val()+" Stat Entry","index.html#!"+$('#txt_player').val());
+    window.location = "index.html#!"+$('#txt_player').val();
+    getPlayer();
+}
+
 function getPlayer() {
     var url = window.self.location.href;
     var kvp = url.split("#!");
-    if(kvp.length!=2) { window.location = "index.html";}
+    if(kvp.length!=2) { window.location = "index.html#!";}
     $('#a_stats').attr('href','stats.html#!'+kvp[1]);
     $('#a_home').attr('href','index.html#!'+kvp[1]);
     $('#a_charts').attr('href','charts.html#!'+kvp[1]);
@@ -56,4 +62,5 @@ function drawNav() {
 
 $(document).ready(function () {
     drawNav();
+    $('#txt_player').blur(function() {setPlayer()});
 });
