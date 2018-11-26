@@ -1,3 +1,22 @@
+// HELPER METHODS
+function talley(rootobj, val, summary) {
+    rootobj.push(val);
+    var localTotal = 0;
+    $.each(rootobj, function(i,v) {
+        localTotal+=v;
+    })
+    summary = localTotal;
+}
+
+function countOccurences(arr, match) {
+    var ct = 0;
+    $.each(arr, function(i,v) {
+        if(v==match) { ct++; }
+    });
+    return ct;
+}
+
+// DRAW CHARTS METHODS
 function drawPinsChart() {
     var data = google.visualization.arrayToDataTable(tbl_pins);
     var options = {
@@ -29,5 +48,22 @@ function drawFBChart() {
         }
     };
     var chart = new google.visualization.LineChart(document.getElementById('chrt_fb'));
+    chart.draw(data, options);
+}
+
+function drawOpenFramesChart() {
+    var data = google.visualization.arrayToDataTable(tbl_open);
+    var options = {
+        title: getPlayer() + ' Open Frames'
+    };
+    var chart = new google.visualization.PieChart(document.getElementById('chrt_of'));
+    chart.draw(data, options);
+}
+function drawStrikesChart() {
+    var data = google.visualization.arrayToDataTable(tbl_strike);
+    var options = {
+        title: getPlayer() + ' Strikes'
+    };
+    var chart = new google.visualization.PieChart(document.getElementById('chrt_strikes'));
     chart.draw(data, options);
 }
