@@ -32,6 +32,9 @@ function getNextBall(framenum, bn) {
       if(framenum==10) {
         // 10th frame you two more throws if first was a strike
         framescore = 10 + getNextBall(9,2) + getNextBall(9,3);
+        if(getNextBall(9,3)==10) {
+          framescore = framescore - getNextBall(9,2);
+        }
       } else {
         // not 10th frame
         // get next throw
