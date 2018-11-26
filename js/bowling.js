@@ -5,7 +5,7 @@ function getNextBall(framenum, bn) {
     // so we are trying to get two balls ahead which is frame 11 ball 1
     // so redirect to frame 10 ball 2 and return value back to frame 9's call
     if((nextframenum == 11) && (bn == 1)) {
-      return $('input[data-frame="frame10"][data-ball="ball2').val();
+      return $('input[data-frame="frame10"][data-ball="ball2').val()*1;
     }
     // ignore any calculations beyond 10th frame
     else if (nextframenum > 10) {
@@ -97,6 +97,17 @@ function getNextBall(framenum, bn) {
     }
     else { val = val*1;}
     return val;
+  }
+
+  function getPlayer() {
+    var url = window.self.location.href;
+    var kvp = url.split("#!");
+    if(kvp.length!=2) { window.location = "index.html";}
+    $('#a_stats').attr('href','stats.html#!'+kvp[1]);
+    $('#a_home').attr('href','index.html#!'+kvp[1]);
+    $('#a_charts').attr('href','charts.html#!'+kvp[1]);
+    $('#a_history').attr('href','history.html#!'+kvp[1]);
+    return kvp[1];
   }
 
   Date.prototype.yyyymmdd = function() {
