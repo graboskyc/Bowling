@@ -102,6 +102,7 @@
                 }
               }
               if(i==10) {
+                frame.b2 = correctFrameNum($('input[data-frame="'+f+'"][data-ball="ball2"').val());
                 frame.b3 = correctFrameNum($('input[data-frame="'+f+'"][data-ball="ball3"').val());
                 frame.b3spare = false;
                 if (frame.b3 == "/") { 
@@ -155,6 +156,7 @@
           console.log("Fired");
           $('#a_history').attr("href", "history.html#!" + $('#txt_player').val());
           $('#a_stats').attr("href", "stats.html#!" + $('#txt_player').val());
+          $('title').text( $('#txt_player').val() + ' Score Entry');
         });
         var url = window.self.location.href;
         var kvp = url.split("#!");
@@ -162,6 +164,7 @@
           $('#txt_player').val(kvp[1]);
           $('#a_history').attr("href", "history.html#!" + $('#txt_player').val());
           $('#a_stats').attr("href", "stats.html#!" + $('#txt_player').val());
+          $('title').text( $('#txt_player').val() + ' Score Entry');
         }
       });
     </script>
