@@ -1,0 +1,128 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Bowling Tracker">
+    <meta name="author" content="graboskyc">
+
+    <title>Bowling Tracker</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="css/album.css" rel="stylesheet">
+    <link href="css/bowling.css" rel="stylesheet">
+    <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
+  </head>
+
+  <body>
+
+      <header>
+          <div class="navbar navbar-dark bg-dark shadow-sm">
+            <div class="container d-flex justify-content-between">
+                <a href="index.html" id="a_home" class="navbar-brand d-flex align-items-center">
+                  <i class="fa fa-home" aria-hidden="true"></i> &nbsp; Home
+                </a>
+                <a id="a_history" class="navbar-brand d-flex align-items-center">
+                    <i class="fa fa-history" aria-hidden="true"></i> &nbsp; History
+                </a>
+                <a href="#" id="a_stats" class="navbar-brand d-flex align-items-center">
+                  <i class="fa fa-table" aria-hidden="true"></i> &nbsp; Statistics
+                </a>
+                <a href="#" id="a_charts" class="navbar-brand d-flex align-items-center">
+                    <i class="fa fa-line-chart" aria-hidden="true"></i> &nbsp; Charts
+                </a>
+            </div>
+          </div>
+        </header>
+
+    <section class="jumbotron text-center"  style="background: url(assets/jumbotron.JPG); background-repeat: no-repeat; background-position:  center center; background-size: cover;">
+      <div class="container">
+        <h1 class="jumbotron-heading" style="color:#ffffff;font-size:60px;font-weight: bold;">Bowling Scores</h1>
+        <button class="btn btn-secondary btn-md btndateselector" data-days="2" onclick="loadDays(this)">Today</button>
+        <button class="btn btn-secondary btn-md btndateselector" data-days="7" onclick="loadDays(this)">Week</button>
+        <button class="btn btn-secondary btn-md btndateselector" data-days="8" onclick="loadDays(this)">8 Days</button>
+        <button class="btn btn-secondary btn-md btndateselector" data-days="30" onclick="loadDays(this)">30 Days</button>
+        <button class="btn btn-secondary btn-md btndateselector" data-days="90" onclick="loadDays(this)">90 Days</button>
+        <button class="btn btn-primary btn-md  btndateselector" data-days="0" onclick="loadDays(this)">All Time</button>
+      </div>
+    </section>
+
+    <div class="container">
+      <div id="chrt_pins" style="width: 100%; height: 500px; margin-top:20px;"></div>
+      <div id="chrt_fb" style="width: 100%; height: 500px; margin-top:20px;"></div>
+    </div>
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="js/jquery.min.js"><\/script>')</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="js/ie10-viewport-bug-workaround.js"></script>
+    <script src="js/bowling.js"></script>
+    <script src="https://s3.amazonaws.com/stitch-sdks/js/bundles/4.0.13/stitch.js"></script>
+    <script src="js/secrets.js"></script>
+    <script src="js/helpers.js"></script>
+    <script src="js/charts.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script>
+      // GLOBALS
+      var client = 0;
+      var db = 0;
+      var runningTotal = 0;
+      var totals = [];
+      var games=0;
+      var tbl_pins = 0;
+      
+
+      function buildGrid(docs) {
+        tbl_pins = [["Date","Pins"]];
+        tbl_fb = [["Date","First Ball"]];
+        docs.map(game=> {
+          trackTotal(game.total*1);
+          var d = new Date(game.played_on);
+          $('#txt_player').text(game.name);
+
+          var b1 = 0;
+          $.each(game.frames, function(i,f) {
+            b1+=f.b1;
+          });
+          tbl_pins.push([d.yyyymmdd()+"_"+game.game, game.total]);
+          tbl_fb.push([d.yyyymmdd()+"_"+game.game, Math.floor(b1/10)]);
+        });
+        google.charts.setOnLoadCallback(drawPinsChart);
+        google.charts.setOnLoadCallback(drawFBChart);
+      }
+
+      function loadData(player,days) {
+        $('#mainctr').empty();
+        runningTotal = 0;
+        games = 0;
+        totals = [];
+        
+        var find = {name:player};
+        if(days != 0) {
+          var d = new Date();
+          d.setDate(d.getDate()-days*1);
+          find = {name:player, played_on: { "$gt": d}}
+        }
+        client.auth.loginWithCredential(new stitch.AnonymousCredential()).then(() => 
+          db.collection('games').find(find,{ sort: {played_on: -1, game:1}}).asArray()).then(buildGrid).catch(err => {console.error(err)});
+      }
+
+      $(function() {
+        client = stitch.Stitch.initializeDefaultAppClient('bowling-sfeoc');
+        db = client.getServiceClient(stitch.RemoteMongoClient.factory, 'mongodb-atlas').db('bowling');
+        google.charts.load('current', {'packages':['corechart']});
+        var p = getPlayer();
+        loadData(p,0)
+        });
+    </script>
+  </body>
+</html>
