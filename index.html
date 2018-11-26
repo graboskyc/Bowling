@@ -35,6 +35,9 @@
                 <a href="#" id="a_charts" class="navbar-brand d-flex align-items-center">
                     <i class="fa fa-line-chart" aria-hidden="true"></i> &nbsp; Charts
                 </a>
+                <a href="#" id="a_team" class="navbar-brand d-flex align-items-center">
+                  <i class="fa fa-users" aria-hidden="true"></i> &nbsp; Teams
+                </a>
             </div>
           </div>
         </header>
@@ -48,6 +51,7 @@
     <div class="album text-muted">
       <div class="bodyctr">
         <h2 class="nameform"><i class="fa fa-fw fa-user" aria-hidden="true"></i> Player: <input type="text" id="txt_player" value=""  class="nameform" style="width:250px;"  /></h2>
+        <h2 class="nameform"><i class="fa fa-fw fa-users" aria-hidden="true"></i> Team: <input type="text" id="txt_team" value=""  class="nameform" style="width:250px;"  /></h2>
         <h2 class="nameform"><i class="fa fa-fw fa-trophy" aria-hidden="true"></i> Game: <input type="text" id="txt_gamenum" value="1"  class="nameform" style="width:40px;" /> <button type="button" class="btn btn-info" onclick="nextGame()"><i class="fa fa-forward" aria-hidden="true"></i> Next Game</button></h2>
         <h2 class="nameform"><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Date: <input type="text" id="txt_date" class="nameform" style="width:250px;"  /> </h2>
         <div class="row" id="mainctr">
@@ -91,6 +95,7 @@
             obj.name = $('#txt_player').val();
             obj.game = $('#txt_gamenum').val()*1;
             obj.played_on =$ ('#txt_date').val();
+            obj.team = $('#txt_team').val();
             obj.frames = [];
             while (i < 11) {
               var frame = {};

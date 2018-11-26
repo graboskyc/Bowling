@@ -67,3 +67,17 @@ function drawStrikesChart() {
     var chart = new google.visualization.PieChart(document.getElementById('chrt_strikes'));
     chart.draw(data, options);
 }
+
+function drawTeamChart() {
+    var data = google.visualization.arrayToDataTable(tbl_totpins);
+    var options = {
+        title: 'Team Score Breakdown',
+        legend: { position: 'bottom' },
+        series:{
+            0:{targetAxisIndex:0},
+            1:{targetAxisIndex:1}
+        }
+    };
+    var chart = new google.visualization.ColumnChart(document.getElementById('chrt_pins'));
+    chart.draw(data, options);
+}

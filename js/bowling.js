@@ -107,6 +107,7 @@ function getNextBall(framenum, bn) {
     $('#a_home').attr('href','index.html#!'+kvp[1]);
     $('#a_charts').attr('href','charts.html#!'+kvp[1]);
     $('#a_history').attr('href','history.html#!'+kvp[1]);
+    $('#a_team').attr('href','teams.html#!'+kvp[1]);
     return kvp[1];
   }
 
