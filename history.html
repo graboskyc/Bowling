@@ -20,37 +20,22 @@
 
   <body>
 
-      <header>
-          <div class="navbar navbar-dark bg-dark shadow-sm">
-            <div class="container d-flex justify-content-between">
-                <a href="index.html" id="a_home" class="navbar-brand d-flex align-items-center">
-                  <i class="fa fa-home" aria-hidden="true"></i> &nbsp; Home
-                </a>
-                <a id="a_history" class="navbar-brand d-flex align-items-center">
-                    <i class="fa fa-history" aria-hidden="true"></i> &nbsp; History
-                </a>
-                <a href="#" id="a_stats" class="navbar-brand d-flex align-items-center">
-                  <i class="fa fa-table" aria-hidden="true"></i> &nbsp; Statistics
-                </a>
-                <a href="#" id="a_charts" class="navbar-brand d-flex align-items-center">
-                    <i class="fa fa-line-chart" aria-hidden="true"></i> &nbsp; Charts
-                </a>
-                <a href="#" id="a_team" class="navbar-brand d-flex align-items-center">
-                  <i class="fa fa-users" aria-hidden="true"></i> &nbsp; Teams
-                </a>
-            </div>
-          </div>
-        </header>
+    <header>
+      <div class="navbar navbar-dark bg-dark shadow-sm">
+        <div class="container d-flex justify-content-between" id="div_nav">
+        </div>
+      </div>
+    </header>
 
     <section class="jumbotron text-center"  style="background: url(assets/jumbotron.JPG); background-repeat: no-repeat; background-position:  center center; background-size: cover;">
       <div class="container">
         <h1 class="jumbotron-heading" style="color:#ffffff;font-size:60px;font-weight: bold;">Bowling Scores</h1>
-        <button class="btn btn-secondary btn-md btndateselector" data-days="2" onclick="loadDays(this)">Today</button>
+        <button class="btn btn-primary btn-md btndateselector" data-days="2" onclick="loadDays(this)">Last Session</button>
         <button class="btn btn-secondary btn-md btndateselector" data-days="7" onclick="loadDays(this)">Week</button>
         <button class="btn btn-secondary btn-md btndateselector" data-days="8" onclick="loadDays(this)">8 Days</button>
         <button class="btn btn-secondary btn-md btndateselector" data-days="30" onclick="loadDays(this)">30 Days</button>
         <button class="btn btn-secondary btn-md btndateselector" data-days="90" onclick="loadDays(this)">90 Days</button>
-        <button class="btn btn-primary btn-md  btndateselector" data-days="0" onclick="loadDays(this)">All Time</button>
+        <button class="btn btn-secondary btn-md  btndateselector" data-days="0" onclick="loadDays(this)">All Time</button>
       </div>
     </section>
 
@@ -87,6 +72,9 @@
 
       function buildGrid(docs) {
         docs.map(game=> {
+          if(game.hasOwnProperty("documents")) {
+            game=game.documents;
+          }
           var w = 1; 
           wp = "33";
           apStr = '<div class="row" style="margin-top:10px;">\
@@ -140,21 +128,35 @@
         games = 0;
         totals = [];
         
-        var find = {name:player};
-        if(days != 0) {
-          var d = new Date();
-          d.setDate(d.getDate()-days*1);
-          find = {name:player, played_on: { "$gt": d}}
+        if(days == 1) {
+          var agg = [{"$match": {name:player}},
+          {"$group": {_id: {year: {"$year": "$played_on"}, doy: {"$dayOfYear": "$played_on"}}, documents: {"$push": "$$ROOT"}}}, 
+          {"$sort": {_id: -1}}, {"$limit": 1}, 
+          {"$unwind": {path: "$documents"}},
+          {"$sort": {"documents.played_on":-1, "documents.game":1}
+          }];
+
+          client.auth.loginWithCredential(new stitch.AnonymousCredential()).then(() => 
+            db.collection('games').aggregate(agg).asArray()).then(buildGrid).catch(err => {console.error(err)});
+        } else {
+          var find = {name:player};
+
+          if (days != 0 ) {
+            var d = new Date();
+            d.setDate(d.getDate()-days*1);
+            find = {name:player, played_on: { "$gt": d}}
+          }
+
+          client.auth.loginWithCredential(new stitch.AnonymousCredential()).then(() => 
+            db.collection('games').find(find,{ sort: {played_on: -1, game:1}}).asArray()).then(buildGrid).catch(err => {console.error(err)});
         }
-        client.auth.loginWithCredential(new stitch.AnonymousCredential()).then(() => 
-          db.collection('games').find(find,{ sort: {played_on: -1, game:1}}).asArray()).then(buildGrid).catch(err => {console.error(err)});
       }
 
       $(function() {
         client = stitch.Stitch.initializeDefaultAppClient('bowling-sfeoc');
         db = client.getServiceClient(stitch.RemoteMongoClient.factory, 'mongodb-atlas').db('bowling');
         var p = getPlayer();
-        loadData(p,0)
+        loadData(p,1)
         });
     </script>
   </body>

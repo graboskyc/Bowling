@@ -98,25 +98,3 @@ function getNextBall(framenum, bn) {
     else { val = val*1;}
     return val;
   }
-
-  function getPlayer() {
-    var url = window.self.location.href;
-    var kvp = url.split("#!");
-    if(kvp.length!=2) { window.location = "index.html";}
-    $('#a_stats').attr('href','stats.html#!'+kvp[1]);
-    $('#a_home').attr('href','index.html#!'+kvp[1]);
-    $('#a_charts').attr('href','charts.html#!'+kvp[1]);
-    $('#a_history').attr('href','history.html#!'+kvp[1]);
-    $('#a_team').attr('href','teams.html#!'+kvp[1]);
-    return kvp[1];
-  }
-
-  Date.prototype.yyyymmdd = function() {
-    var mm = this.getMonth() + 1; // getMonth() is zero-based
-    var dd = this.getDate();
-
-    return [this.getFullYear(),
-            (mm>9 ? '' : '0') + mm,
-            (dd>9 ? '' : '0') + dd
-          ].join('-');
-  };

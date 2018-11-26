@@ -28,3 +28,32 @@ function loadDays(btn) {
     var p = getPlayer();
     loadData(p,$(btn).data("days"))
 }
+
+function getPlayer() {
+    var url = window.self.location.href;
+    var kvp = url.split("#!");
+    if(kvp.length!=2) { window.location = "index.html";}
+    $('#a_stats').attr('href','stats.html#!'+kvp[1]);
+    $('#a_home').attr('href','index.html#!'+kvp[1]);
+    $('#a_charts').attr('href','charts.html#!'+kvp[1]);
+    $('#a_history').attr('href','history.html#!'+kvp[1]);
+    $('#a_team').attr('href','teams.html#!'+kvp[1]);
+    return kvp[1];
+  }
+
+function drawNav() {
+    var nav = [{id:"a_home", href:"index.html",fa:"home",title:"Home"},
+    {id:"a_history", href:"history.html",fa:"history",title:"History"},
+    {id:"a_charts", href:"charts.html",fa:"line-chart",title:"Charts"},
+    {id:"a_stats", href:"stats.html",fa:"table",title:"Summary"},
+    {id:"a_team", href:"teams.html",fa:"users",title:"Teams"}
+    ];
+    $.each(nav, function(i,v) {
+        $("#div_nav").append('<a href="'+v.href+'" id="'+v.id+'" class="navbar-brand d-flex align-items-center"><i class="fa fa-'+v.fa+'" aria-hidden="true"></i> &nbsp; '+v.title+'</a>');
+    });
+    getPlayer();
+}
+
+$(document).ready(function () {
+    drawNav();
+});
