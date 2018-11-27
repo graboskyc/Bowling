@@ -81,3 +81,23 @@ function drawTeamChart() {
     var chart = new google.visualization.ColumnChart(document.getElementById('chrt_pins'));
     chart.draw(data, options);
 }
+
+function drawGamesChart() {
+    var tbl = [["Game","Avg Pins"]];
+    $.each(gametracker, function(k,v) {
+        tbl.push([k,Math.floor(v.total/v.ct)]);
+    });
+    var data = google.visualization.arrayToDataTable(tbl);
+    var options = {
+        title: 'Avg Score By Game',
+        legend: { position: 'none' },
+        vAxis: { 
+            viewWindow:{
+            max:300,
+            min:50
+            }
+        }
+    };
+    var chart = new google.visualization.ColumnChart(document.getElementById('chrt_games'));
+    chart.draw(data, options);
+}

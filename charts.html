@@ -42,6 +42,7 @@
     <div class="container">
       <div id="chrt_pins" style="width: 100%; height: 500px; margin-top:20px;"></div>
       <div id="chrt_fb" style="width: 100%; height: 500px; margin-top:20px;"></div>
+      <div id="chrt_games" style="width: 100%; height: 500px; margin-top:20px;"></div>
       <div id="chrt_of" style="width: 50%; height: 500px; margin-top:20px;float:left;"></div>
       <div id="chrt_strikes" style="width: 50%; height: 500px; margin-top:20px;float:left;"></div>
     </div>
@@ -73,6 +74,7 @@
       var tbl_fb = 0;
       var tbl_strike = 0;
       var tbl_open = 0;
+      var gametracker = {};
       
 
       function buildGrid(docs) {
@@ -93,6 +95,15 @@
           $('#txt_player').text(game.name);
 
           var b1 = 0;
+
+          if(gametracker.hasOwnProperty("Game"+game.game)) {
+            gametracker["Game"+game.game]["total"] = ((gametracker["Game"+game.game]["total"]*1) + (game.total*1));
+            gametracker["Game"+game.game]["ct"] = ((gametracker["Game"+game.game]["ct"]*1) + 1);
+          } else {
+            gametracker["Game"+game.game] = {};
+            gametracker["Game"+game.game]["total"] = (game.total*1);
+            gametracker["Game"+game.game]["ct"] = 1;
+          }
           
           $.each(game.frames, function(i,f) {
             b1+=f.b1;
@@ -118,6 +129,7 @@
         google.charts.setOnLoadCallback(drawFBChart);
         google.charts.setOnLoadCallback(drawOpenFramesChart);
         google.charts.setOnLoadCallback(drawStrikesChart);
+        google.charts.setOnLoadCallback(drawGamesChart);
       }
 
       function loadData(player,days) {
