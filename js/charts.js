@@ -101,3 +101,46 @@ function drawGamesChart() {
     var chart = new google.visualization.ColumnChart(document.getElementById('chrt_games'));
     chart.draw(data, options);
 }
+
+function drawLocChart() {
+    var tbl = [["Location","Avg Pins"]];
+    $.each(loctracker, function(k,v) {
+        tbl.push([k,Math.floor(v.pins/v.games)]);
+    });
+    var data = google.visualization.arrayToDataTable(tbl);
+    var options = {
+        title: 'Avg Score By Location',
+        legend: { position: 'none' },
+        vAxis: { 
+            viewWindow:{
+            max:300,
+            min:50
+            }
+        }
+    };
+    var chart = new google.visualization.ColumnChart(document.getElementById('chrt_loc'));
+    chart.draw(data, options);
+}
+
+function drawGuage() {
+    var tbl = [["Label","Value"]];
+    var total = 0;
+    var ct=0;
+    $.each(tbl_pins, function(i,v) {
+        if(i>0) {
+            total = ((total*1) + (v[1]));
+            ct++;
+        }
+    });
+    tbl.push(["Avg", (total/ct)]);
+    var data = google.visualization.arrayToDataTable(tbl);
+    var options = {
+        greenFrom:220, greenTo:300,
+        yellowFrom:150, yellowTo:220,
+        redFrom:50, redTo:150,
+        minorTicks:20,
+        min:50, max:300
+    };
+    var chart = new google.visualization.Gauge(document.getElementById('chrt_guage'));
+    chart.draw(data, options);
+}
