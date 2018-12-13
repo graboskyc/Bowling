@@ -37,6 +37,7 @@
       <div class="bodyctr">
         <h2 class="nameform"><i class="fa fa-fw fa-user" aria-hidden="true"></i> Player: <input type="text" id="txt_player" value=""  class="nameform" style="width:250px;"  /></h2>
         <h2 class="nameform"><i class="fa fa-fw fa-users" aria-hidden="true"></i> Team: <input type="text" id="txt_team" value=""  class="nameform" style="width:250px;"  /></h2>
+        <h2 class="nameform"><i class="fa fa-fw fa-map-marker" aria-hidden="true"></i> Location: <input type="text" id="txt_location" value=""  class="nameform" style="width:250px;"  /></h2>
         <h2 class="nameform"><i class="fa fa-fw fa-trophy" aria-hidden="true"></i> Game: <input type="text" id="txt_gamenum" value="1"  class="nameform" style="width:40px;" /> <button type="button" class="btn btn-info" onclick="nextGame()"><i class="fa fa-forward" aria-hidden="true"></i> Next Game</button></h2>
         <h2 class="nameform"><i class="fa fa-fw fa-calendar" aria-hidden="true"></i> Date: <input type="text" id="txt_date" class="nameform" style="width:250px;"  /> </h2>
         <div class="row" id="mainctr">
@@ -82,6 +83,7 @@
             obj.game = $('#txt_gamenum').val()*1;
             obj.played_on =$ ('#txt_date').val();
             obj.team = $('#txt_team').val();
+            obj.location = $('#txt_location').val();
             obj.frames = [];
             while (i < 11) {
               var frame = {};
