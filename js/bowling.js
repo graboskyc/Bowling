@@ -38,20 +38,26 @@ function getNextBall(framenum, bn) {
       if(framenum==10) {
         // 10th frame you two more throws if first was a strike
         framescore = 10 + getNextBall(9,2) + getNextBall(9,3);
-        if(getNextBall(9,3)==10) {
-          framescore = framescore - getNextBall(9,2);
-        }
       } else {
         // not 10th frame
         // get next throw
         var nb = getNextBall(framenum,1);
         // if next frame's throw is also a strike, you get the throw of frame ahead of next frame
         // otherwise you just get next frame's both throws and add them together, accounting for that it could be a spare
-        if(nb == 10) { framescore = 10 + nb + getNextBall(framenum+1,1)}
-        else if(getNextBall(framenum,2) == 10) {
-          framescore = 20;
+        if(framenum==9) {
+          if(nb == 10) { framescore = 10 + nb + getNextBall(framenum,2)}
+          else if(getNextBall(framenum,2) == 10) {
+            framescore = 20;
+          }
+          else { framescore = 10 + getNextBall(framenum,1) + getNextBall(framenum,2); }
         }
-        else { framescore = 10 + getNextBall(framenum,1) + getNextBall(framenum,2); }
+        else {
+          if(nb == 10) { framescore = 10 + nb + getNextBall(framenum+1,1)}
+          else if(getNextBall(framenum,2) == 10) {
+            framescore = 20;
+          }
+          else { framescore = 10 + getNextBall(framenum,1) + getNextBall(framenum,2); }
+        }
       }
     } // end strike
     else if(isNaN(b2)) {
