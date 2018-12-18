@@ -1,0 +1,18 @@
+{
+    "id": "5bb6ced7b4a5c5d7a375e446",
+    "name": "newRecord",
+    "type": "DATABASE",
+    "config": {
+        "operation_types": [
+            "INSERT"
+        ],
+        "database": "bowling",
+        "collection": "games",
+        "service_name": "mongodb-atlas",
+        "match": {},
+        "full_document": true,
+        "unordered": false
+    },
+    "function_name": "recalcStats",
+    "disabled": false
+}

@@ -9,6 +9,8 @@ exports = async function(changeEvent) {
 
   pconn.updateMany({},{$set:{leagueavg:Math.floor(league[0].avgpins)}});
   
+  var user = await pconn.findOne({name:doc.name});
+  
   // strike, spare, split, splits picked up, first ball average, open frames
   var st = await gconn.aggregate([{$match: { name: doc.name}},{$unwind: '$frames'},{$match: {$or: [{'frames.b1':10},{'frames.b2':10},{'frames.b3':10}]}},{$count:"val"}]).toArray();
   var sp = await gconn.aggregate([{$match: { name: doc.name}},{$unwind: '$frames'},{$match: {$or: [{'frames.spare':true},{'frames.b3spare':true}]}},{$count:"val"}]).toArray();
@@ -67,4 +69,14 @@ exports = async function(changeEvent) {
     maxpins:aqr[0].maxpins,
     handicap:hc,
     modified:d}},{upsert:true});
+    
+  if (user.hasOwnProperty("phone")) {
+    const twilio = context.services.get("twil");
+    const ourNumber = context.values.get("twilphone");
+    twilio.send({
+      from: ourNumber,
+      to: user.phone,
+      body: 'You bowled a ' + doc.total + ' bringing avg to ' + Math.floor(aqr[0].avgpins) + '. Visit https://grabosky.azurewebsites.net/Bowling/#!' + doc.name
+    });
+  }
 };

@@ -1,0 +1,23 @@
+{
+    "id": "5bb76c5413c806bf5e94ab6c",
+    "database": "bowling",
+    "collection": "players",
+    "roles": [
+        {
+            "name": "default",
+            "apply_when": {},
+            "read": true,
+            "write": false,
+            "insert": false,
+            "delete": false,
+            "additional_fields": {}
+        }
+    ],
+    "schema": {
+        "properties": {
+            "_id": {
+                "bsonType": "objectId"
+            }
+        }
+    }
+}
