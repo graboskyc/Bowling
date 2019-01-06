@@ -116,7 +116,10 @@
             $('#jsontosend').text(JSON.stringify(obj));
 
             var url = SECRETSTITCHURL+JSON.stringify(obj);
-            $.get( url );
+            $.get( url )
+              .done(function() {alert("Saved!");})
+              .fail(function() { alert("Error Saving!");})
+              .error(function() {alert("Error saving!");});
           }
         }
       }
